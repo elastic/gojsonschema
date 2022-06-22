@@ -135,7 +135,7 @@ func (d *Schema) parseSchema(documentNode interface{}, currentSchema *subSchema)
 		))
 	}
 	if k, ok := m[keyID].(string); ok {
-		jsonReference, err := gojsonreference.NewJsonReference(k)
+		jsonReference, err := d.pool.jsonLoaderFactory.New(k).JsonReference()
 		if err != nil {
 			return err
 		}
@@ -225,8 +225,7 @@ func (d *Schema) parseSchema(documentNode interface{}, currentSchema *subSchema)
 	}
 
 	if k, ok := m[KEY_REF].(string); ok {
-
-		jsonReference, err := gojsonreference.NewJsonReference(k)
+		jsonReference, err := d.pool.jsonLoaderFactory.New(k).JsonReference()
 		if err != nil {
 			return err
 		}
