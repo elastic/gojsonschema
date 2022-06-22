@@ -93,7 +93,7 @@ func (p *schemaPool) parseReferencesRecursive(document interface{}, ref gojsonre
 			keyID = KEY_ID
 		}
 		if existsMapKey(m, keyID) && isKind(m[keyID], reflect.String) {
-			jsonReference, err := gojsonreference.NewJsonReference(m[keyID].(string))
+			jsonReference, err := p.jsonLoaderFactory.New(m[keyID].(string)).JsonReference()
 			if err == nil {
 				localRef, err = ref.Inherits(jsonReference)
 				if err == nil {
@@ -106,7 +106,7 @@ func (p *schemaPool) parseReferencesRecursive(document interface{}, ref gojsonre
 		}
 
 		if existsMapKey(m, KEY_REF) && isKind(m[KEY_REF], reflect.String) {
-			jsonReference, err := gojsonreference.NewJsonReference(m[KEY_REF].(string))
+			jsonReference, err := p.jsonLoaderFactory.New(m[KEY_REF].(string)).JsonReference()
 			if err == nil {
 				absoluteRef, err := localRef.Inherits(jsonReference)
 				if err == nil {
@@ -150,7 +150,7 @@ func (p *schemaPool) GetDocument(reference gojsonreference.JsonReference) (*sche
 	}
 
 	// Create a deep copy, so we can remove the fragment part later on without altering the original
-	refToURL, _ := gojsonreference.NewJsonReference(reference.String())
+	refToURL, _ := p.jsonLoaderFactory.New(reference.String()).JsonReference()
 
 	// First check if the given fragment is a location independent identifier
 	// http://json-schema.org/latest/json-schema-core.html#rfc.section.8.2.3
