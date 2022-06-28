@@ -1,7 +1,7 @@
-package: github.com/xeipuuv/gojsonschema
+package: github.com/elastic/gojsonschema
 license: Apache 2.0
 import:
-- package: github.com/xeipuuv/gojsonschema
+- package: github.com/elastic/gojsonschema
 
 - package: github.com/xeipuuv/gojsonpointer
 
