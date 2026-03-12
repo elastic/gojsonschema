@@ -257,10 +257,17 @@ func (f DateFormatChecker) IsFormat(input interface{}) bool {
 }
 
 // IsFormat checks if input correctly formatted time (HH:MM:SS or HH:MM:SSZ-07:00)
+// per RFC3339, which does not allow comma as a decimal separator (unlike ISO 8601).
 func (f TimeFormatChecker) IsFormat(input interface{}) bool {
 	asString, ok := input.(string)
 	if !ok {
 		return true
+	}
+
+	// RFC3339 does not permit comma as a fractional seconds separator (ISO 8601 does).
+	// Go's time.Parse accepts both, so we must reject commas explicitly.
+	if strings.ContainsRune(asString, ',') {
+		return false
 	}
 
 	if _, err := time.Parse("15:04:05Z07:00", asString); err == nil {
