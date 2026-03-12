@@ -29,7 +29,6 @@ import (
 	"encoding/json"
 	"math/big"
 	"reflect"
-	"regexp"
 	"strconv"
 	"strings"
 	"unicode/utf8"
@@ -687,8 +686,8 @@ func (v *subSchema) validatePatternProperty(currentSubSchema *subSchema, key str
 
 	validated := false
 
-	for pk, pv := range currentSubSchema.patternProperties {
-		if matches, _ := regexp.MatchString(pk, key); matches {
+	for _, pv := range currentSubSchema.patternProperties {
+		if pv.patternPropertyKey != nil && pv.patternPropertyKey.MatchString(key) {
 			validated = true
 			subContext := NewJsonContext(key, context)
 			validationResult := pv.subValidateWithContext(value, subContext)

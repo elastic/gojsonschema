@@ -124,6 +124,7 @@ type subSchema struct {
 	dependencies         map[string]interface{}
 	additionalProperties interface{}
 	patternProperties    map[string]*subSchema
+	patternPropertyKey   *regexp.Regexp
 	propertyNames        *subSchema
 
 	// validation : array
