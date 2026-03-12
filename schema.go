@@ -321,14 +321,14 @@ func (d *Schema) parseSchema(documentNode interface{}, currentSchema *subSchema)
 			if len(patternPropertiesMap) > 0 {
 				currentSchema.patternProperties = make(map[string]*subSchema)
 				for k, v := range patternPropertiesMap {
-					_, err := regexp.MatchString(k, "")
+					re, err := regexp.Compile(k)
 					if err != nil {
 						return errors.New(formatErrorDescription(
 							Locale.RegexPattern(),
 							ErrorDetails{"pattern": k},
 						))
 					}
-					newSchema := &subSchema{property: k, parent: currentSchema, ref: currentSchema.ref}
+					newSchema := &subSchema{property: k, parent: currentSchema, ref: currentSchema.ref, patternPropertyKey: re}
 					err = d.parseSchema(v, newSchema)
 					if err != nil {
 						return errors.New(err.Error())
